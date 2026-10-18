@@ -108,6 +108,10 @@ extrai() {
   esac
 }
 
+# Executável de verdade? Os pacotes trazem outros arquivos com o mesmo nome (o do fastfetch
+# tem o script de autocomplete "fastfetch"), e a ordem do find muda entre sistemas de arquivos.
+e_elf() { [[ $(head -c4 "$1" 2>/dev/null | od -An -c | tr -d ' ') == '177ELF' ]]; }
+
 # instala_bin nome → instala em /usr/local/bin os binários listados no ferramentas.tsv
 instala_bin() {
   local nome=$1 spec item origem destino tmp achado
@@ -120,8 +124,10 @@ instala_bin() {
   for item in "${itens[@]}"; do
     origem=${item%%:*} destino=${item#*:}
     [[ $item == *:* ]] || destino=$origem
-    achado=$(find "$tmp/x" -type f -name "$origem" | head -1)
-    [[ -n $achado ]] || { rm -rf "$tmp"; falha "$origem não encontrado no pacote de $nome"; return 1; }
+    achado=''
+    while IFS= read -r -d '' f; do e_elf "$f" && { achado=$f; break; }; done \
+      < <(find "$tmp/x" -type f -name "$origem" -print0)
+    [[ -n $achado ]] || { rm -rf "$tmp"; falha "executável $origem não encontrado no pacote de $nome"; return 1; }
     como_root install -m 755 "$achado" "/usr/local/bin/$destino"
   done
   rm -rf "$tmp"
@@ -130,8 +136,13 @@ instala_bin() {
 
 # Versão do lock já instalada? (marcador gravado em /usr/local/share/lvl9/versoes)
 bin_atualizado() {
+  local spec item
   lock_le "$1" 2>/dev/null || return 1
-  grep -qx "$1 $LOCK_VERSAO $LOCK_SHA" "$LVL9_SISTEMA/versoes" 2>/dev/null
+  grep -qx "$1 $LOCK_VERSAO $LOCK_SHA" "$LVL9_SISTEMA/versoes" 2>/dev/null || return 1
+  # binários: confere que cada um instalado é executável de verdade (conserta instalações antigas)
+  spec=$(awk -v n="$1" '$1 == n && $3 == "bin" {print $7}' "$LVL9_REPO/ferramentas.tsv")
+  IFS=, read -ra itens <<< "$spec"
+  for item in "${itens[@]}"; do e_elf "/usr/local/bin/${item#*:}" || return 1; done
 }
 marca_versao() {
   lock_le "$1" || return 1

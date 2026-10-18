@@ -7,6 +7,8 @@ executa() {
     como_alvo "$alvo" git config --global interactive.diffFilter 'delta --color-only'
     como_alvo "$alvo" git config --global delta.navigate true
     como_alvo "$alvo" git config --global delta.line-numbers true
+    # tema fixo: sem isso o delta pergunta a cor de fundo ao terminal e trava nos que não respondem
+    como_alvo "$alvo" git config --global delta.dark true
     como_alvo "$alvo" git config --global merge.conflictStyle zdiff3
   done
   info "delta configurado no git (usuário e root)"

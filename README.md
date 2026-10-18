@@ -50,7 +50,7 @@ quando quiser: cada passo só mexe no que mudou e guarda backup do que substitui
   </tr>
   <tr>
     <td align="center"><sub>Escolhas na tela: <code>x</code> marca, <code>Enter</code> confirma</sub></td>
-    <td align="center"><sub>Cada passo com tempo e resumo no final</sub></td>
+    <td align="center"><sub>Cada passo com tempo, resumo e o terminal novo já pronto</sub></td>
   </tr>
 </table>
 
@@ -198,6 +198,14 @@ lvl9 dicas on|off · lvl9 fastfetch on|off
 <br>
 Pode, quantas vezes quiser. A tela já vem com as suas escolhas anteriores, e cada passo só mexe no
 que mudou. É o que o <code>lvl9 update</code> faz por baixo.
+</details>
+
+<details>
+<summary><b>Terminei a instalação e o terminal continua igual.</b></summary>
+<br>
+O terminal de onde você rodou o <code>curl | bash</code> ainda está com a configuração antiga. No fim da
+instalação o lvl9 pergunta se quer abrir um terminal novo, já com tudo. Se respondeu "Não", abra outra
+janela do terminal ou digite <code>exec bash</code>.
 </details>
 
 <details>

@@ -30,9 +30,13 @@ executa() {
   done
 
   # Versão anterior ao lvl9 (prompt em /usr/local/share/starship): já migrada
-  if [[ -d /usr/local/share/starship ]]; then
+  # (terminais já abertos ainda apontam para os temas antigos: fica um link até reabrirem)
+  if [[ -d /usr/local/share/starship && ! -L /usr/local/share/starship/temas ]]; then
     faz_backup /usr/local/share/starship
     como_root rm -rf /usr/local/share/starship
+    como_root mkdir -p /usr/local/share/starship
+    como_root ln -s "$LVL9_SISTEMA/starship" /usr/local/share/starship/temas
+    como_root ln -s "$LVL9_SISTEMA/bash/prompt.bash" /usr/local/share/starship/prompt.bash
   fi
   info "tema do prompt: ${LVL9_TEMA:-tokyo-night}"
 }

@@ -10,7 +10,7 @@ alias	sys	sistema	fastfetch -c /usr/local/share/lvl9/fastfetch.jsonc	informaçõ
 alias	monitor	monitorar	btop	monitor de CPU, memória, disco e rede (top também abre o btop)
 alias	disk	disco	duf	espaço livre em cada disco e partição
 alias	usage	pasta	dust	o que está ocupando espaço na pasta atual
-alias	proc	processos	procs	processos com cores e busca (ex.: proc nginx)
+alias	proc	processos	procs --theme dark	processos com cores e busca (ex.: proc nginx)
 alias	ports	portas	sudo ss -tulpn	portas abertas e qual programa está ouvindo
 alias	update	atualizar	sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y	atualiza todos os pacotes do sistema
 alias	lg	-	lazygit	git inteiro numa interface no terminal (commits, branches, stash)

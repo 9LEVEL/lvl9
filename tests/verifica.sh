@@ -69,5 +69,8 @@ confere "lvl9 diff" lvl9 diff
 # sem systemd no container a seção de serviços é pulada; o resto precisa estar 100%
 confere "lvl9 doctor sem problemas" lvl9 doctor
 
+echo "== cada comando num terminal interativo =="
+bash ~/.local/share/lvl9/tests/comandos.sh || (( erro++ ))
+
 echo "RESULTADO: $ok ok, $erro erro(s)"
 exit $(( erro > 0 ))

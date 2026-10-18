@@ -183,4 +183,14 @@ ui_caixa "$titulo" "" "${linhas[@]}" "" \
   "$(cor "$C_CINZA")log:     ~/.local/state/lvl9/install.log$RST" \
   "$(cor "$C_CINZA")backups: ~/.local/state/lvl9/backups/$LVL9_CARIMBO (root: /root/.local/state/lvl9/backups)$RST"
 printf '\n'
+
+# O shell de onde o curl | bash foi chamado ainda tem a configuração antiga: oferece abrir
+# um novo, já com o lvl9 (sair dele com "exit" volta para o anterior)
+if ! auto && (( falhas == 0 )); then
+  if ui_confirma "Abrir agora um terminal com o lvl9?" sim; then
+    kill "$SUDO_VIVO" 2>/dev/null
+    exec bash -l
+  fi
+  ui_texto "abra um terminal novo (ou digite: exec bash) para ver o lvl9"
+fi
 (( falhas == 0 ))

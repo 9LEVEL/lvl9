@@ -34,9 +34,13 @@ Sleep 1.5s
 Wait@20s /n Não/
 Sleep 2.5s
 Enter
-# fim: o prompt (❯) volta na última linha
+# fim: resumo e a pergunta para abrir o terminal com o lvl9
 Sleep 5s
-Wait@600s /❯/
-Sleep 3s
+Wait@600s /n Não/
+Sleep 1.5s
 Screenshot docs/img/instalado.png
-Sleep 2s
+Sleep 1.5s
+Enter
+# o terminal novo: fastfetch, dica e o prompt
+Wait@30s /❯/
+Sleep 4s

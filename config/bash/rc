@@ -30,7 +30,7 @@ HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=32768
 HISTFILESIZE=$HISTSIZE
 HISTTIMEFORMAT='%F %T  '
-PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+# (o history -a entra no PROMPT_COMMAND no fim do arquivo, depois do prompt)
 
 # ─── Autocomplete ───────────────────────────────────────────────────
 if [[ ! -v BASH_COMPLETION_VERSINFO && -f /usr/share/bash-completion/bash_completion ]]; then
@@ -86,17 +86,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias -- -='cd -'
 
-# zoxide: "cd projeto" pula para o diretório mais usado que bate com o nome
-if command -v zoxide &>/dev/null; then
-  eval "$(zoxide init bash)"
-  alias cd='zd'
-  zd() {
-    if (( $# == 0 )); then builtin cd ~ || return
-    elif [[ -d $1 || $1 == - ]]; then builtin cd "$1" || return
-    else z "$@" || { echo "Diretório não encontrado"; return 1; }; pwd
-    fi
-  }
-fi
 
 # ─── fzf ────────────────────────────────────────────────────────────
 if command -v fzf &>/dev/null; then
@@ -235,6 +224,23 @@ lvl9() {
 
 # mise (gerenciador de versões de linguagens, usado pelo Akita)
 command -v mise &>/dev/null && eval "$(mise activate bash)"
+
+# ─── Ganchos do prompt: por último ──────────────────────────────────
+# O starship refaz o PROMPT_COMMAND ao iniciar; o que entra antes dele se perde. Por isso o
+# zoxide (que também pede para ser o último) e o history -a ficam aqui no fim.
+# zoxide: "cd projeto" pula para o diretório mais usado que bate com o nome
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init bash)"
+  alias cd='zd'
+  zd() {
+    if (( $# == 0 )); then builtin cd ~ || return
+    elif [[ -d $1 || $1 == - ]]; then builtin cd "$1" || return
+    else z "$@" || { echo "Diretório não encontrado"; return 1; }; pwd
+    fi
+  }
+fi
+# grava o histórico a cada comando (depois do prompt, que precisa ler o $? primeiro)
+PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}history -a"
 
 # ─── Boas-vindas: fastfetch + dica do dia ───────────────────────────
 # Não aparece dentro do tmux, do vim, após "lvl9 tema" nem quando desligado:

@@ -15,7 +15,7 @@ jobs:
       - name: shellcheck
         run: |
           shellcheck -x -S warning --shell=bash boot.sh install.sh bin/lvl9 lib/*.sh install/*.sh \
-            tools/bump-versions.sh tests/*.sh config/bash/rc config/bash/prompt.bash \
+            tools/bump-versions.sh tools/screenshots.sh tests/*.sh config/bash/rc config/bash/prompt.bash \
             -e SC2034,SC2088,SC2164
 
   instalacao:

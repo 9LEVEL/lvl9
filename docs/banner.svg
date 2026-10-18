@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 380" width="1280" height="380" role="img" aria-label="lvl9 — pré-setup Debian/Ubuntu + XFCE + xrdp no estilo Omarchy">
+  <defs>
+    <linearGradient id="grad" gradientUnits="userSpaceOnUse" x1="72" y1="92" x2="369.0" y2="194">
+      <stop offset="0" stop-color="#7aa2f7"/>
+      <stop offset="1" stop-color="#bb9af7"/>
+    </linearGradient>
+    <linearGradient id="borda" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7aa2f7"/>
+      <stop offset="1" stop-color="#bb9af7"/>
+    </linearGradient>
+    <radialGradient id="brilho" cx="0.22" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#7aa2f7" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#7aa2f7" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grade" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#c0caf5" stroke-opacity="0.035"/>
+    </pattern>
+  </defs>
+
+  <rect x="1" y="1" width="1278" height="378" rx="22" fill="#1a1b26" stroke="url(#borda)" stroke-width="2"/>
+  <rect x="1" y="1" width="1278" height="378" rx="22" fill="url(#grade)"/>
+  <rect x="1" y="1" width="1278" height="378" rx="22" fill="url(#brilho)"/>
+
+  <!-- arte LVL9: sombra deslocada + blocos com degradê -->
+  <g opacity="0.55">
+    <rect x="78" y="98" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="198" y="98" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="288" y="98" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="333" y="98" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="468" y="98" width="75" height="17.8" fill="#3b2f63"/>
+    <rect x="78" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="198" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="288" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="333" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="453" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="528" y="115" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="78" y="132" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="198" y="132" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="288" y="132" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="333" y="132" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="468" y="132" width="90" height="17.8" fill="#3b2f63"/>
+    <rect x="78" y="149" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="213" y="149" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="273" y="149" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="333" y="149" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="528" y="149" width="30" height="17.8" fill="#3b2f63"/>
+    <rect x="78" y="166" width="105" height="17.8" fill="#3b2f63"/>
+    <rect x="228" y="166" width="60" height="17.8" fill="#3b2f63"/>
+    <rect x="333" y="166" width="105" height="17.8" fill="#3b2f63"/>
+    <rect x="468" y="166" width="75" height="17.8" fill="#3b2f63"/>
+  </g>
+  <g>
+    <rect x="72" y="92" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="192" y="92" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="282" y="92" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="327" y="92" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="462" y="92" width="75" height="17.8" fill="url(#grad)"/>
+    <rect x="72" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="192" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="282" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="327" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="447" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="522" y="109" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="72" y="126" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="192" y="126" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="282" y="126" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="327" y="126" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="462" y="126" width="90" height="17.8" fill="url(#grad)"/>
+    <rect x="72" y="143" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="207" y="143" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="267" y="143" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="327" y="143" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="522" y="143" width="30" height="17.8" fill="url(#grad)"/>
+    <rect x="72" y="160" width="105" height="17.8" fill="url(#grad)"/>
+    <rect x="222" y="160" width="60" height="17.8" fill="url(#grad)"/>
+    <rect x="327" y="160" width="105" height="17.8" fill="url(#grad)"/>
+    <rect x="462" y="160" width="75" height="17.8" fill="url(#grad)"/>
+  </g>
+
+  <text x="72" y="246" font-family="ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace" font-size="17" fill="#565f89">
+    <tspan fill="#bb9af7" font-weight="700">9LEVEL</tspan> · pré-setup Debian/Ubuntu · XFCE · xrdp
+  </text>
+
+  <text x="637" y="118" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="38" font-weight="700" fill="#c0caf5">Sua máquina no nível 9.</text>
+  <text x="637" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#a9b1d6">Prompt powerline, CLI moderna, vim halcyon e</text>
+  <text x="637" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#a9b1d6">Claude Code em uma linha, no estilo do Omarchy.</text>
+
+  <rect x="637" y="226" width="583" height="58" rx="12" fill="#16161e" stroke="#2f334d"/>
+  <text x="659" y="262" font-family="ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace" font-size="16.5" fill="#c0caf5">
+    <tspan fill="#9ece6a">❯</tspan> curl -fsSL <tspan fill="#7aa2f7">…/9LEVEL/lvl9/main/boot.sh</tspan> <tspan fill="#bb9af7">|</tspan> bash<tspan fill="#c0caf5"> ▌<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" dur="1.1s" repeatCount="indefinite"/></tspan>
+  </text>
+
+  <g font-family="ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace" font-size="13.5" fill="#565f89">
+    <text x="637" y="322" xml:space="preserve">Debian 12 · 13    Ubuntu 24.04 · 26.04    x86_64 · arm64</text>
+  </g>
+</svg>

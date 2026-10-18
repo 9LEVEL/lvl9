@@ -1,0 +1,16 @@
+# Configuração comum das cenas do README (incluída com Source)
+Set Shell "bash"
+Set FontFamily "JetBrainsMono Nerd Font Mono"
+Set FontSize 17
+Set LineHeight 1.2
+Set Width 1440
+Set Height 820
+Set Padding 26
+Set Margin 34
+Set MarginFill "/tmp/fundo.png"
+Set WindowBar Colorful
+Set WindowBarSize 40
+Set BorderRadius 12
+Set TypingSpeed 45ms
+Set CursorBlink false
+Set Theme { "name": "lvl9", "black": "#15161e", "red": "#f7768e", "green": "#9ece6a", "yellow": "#e0af68", "blue": "#7aa2f7", "magenta": "#bb9af7", "cyan": "#7dcfff", "white": "#a9b1d6", "brightBlack": "#414868", "brightRed": "#f7768e", "brightGreen": "#9ece6a", "brightYellow": "#e0af68", "brightBlue": "#7aa2f7", "brightMagenta": "#bb9af7", "brightCyan": "#7dcfff", "brightWhite": "#c0caf5", "background": "#1a1b26", "foreground": "#c0caf5", "selection": "#33467c", "cursor": "#c0caf5" }

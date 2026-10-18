@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Verificações depois da instalação (roda como o usuário de teste, dentro do container)
 set -uo pipefail
+# shellcheck source=../lib/comum.sh
 source ~/.local/share/lvl9/lib/comum.sh
 ok=0 erro=0
 confere() {   # confere "descrição" comando...
@@ -9,8 +10,8 @@ confere() {   # confere "descrição" comando...
   else echo "  ✘ $d"; sed 's/^/      /' /tmp/verifica.out | tail -5; (( erro++ )); fi
 }
 sem_erros() { ! grep -qiE 'erro|error|not found|não encontrad|command not found|syntax|line [0-9]+:' "$1"; }
-shell_interativo() {   # shell_interativo [sudo] → abre bash -i num pty e captura a saída
-  script -qc "$* bash -i -c 'alias disco >/dev/null && type prompt-tema >/dev/null && echo SHELL_OK'" /dev/null
+shell_interativo() {   # abre bash -i num pty (como um terminal de verdade) e captura a saída
+  script -qc "bash -i -c 'alias disco >/dev/null && type prompt-tema >/dev/null && echo SHELL_OK'" /dev/null
 }
 
 echo "== binários do lock =="

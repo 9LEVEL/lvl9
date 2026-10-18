@@ -5,6 +5,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
 command_timeout = 500
+scan_timeout = 200   # pastas grandes ou disco lento (o padrão, 30ms, gera aviso no terminal)
 
 format = """
 [░▒▓](#a3aed2)\

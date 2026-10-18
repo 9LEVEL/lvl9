@@ -97,7 +97,8 @@ cmd_doctor() {
     if bin_atualizado "$nome"; then ui_check ok "$nome" "$LOCK_VERSAO"
     else ui_check erro "$nome" "faltando ou fora da versão $LOCK_VERSAO"; (( problemas++ )); fi
   done < "$LVL9_REPO/ferramentas.tsv"
-  if fc-list | grep -q 'JetBrainsMono Nerd Font'; then ui_check ok "Nerd Fonts" "JetBrainsMono, CaskaydiaMono"
+  # sem pipe: com pipefail, o grep -q fecha o pipe e o fc-list "falha" por SIGPIPE
+  if [[ $(fc-list : family) == *'JetBrainsMono Nerd Font'* ]]; then ui_check ok "Nerd Fonts" "JetBrainsMono, CaskaydiaMono"
   else ui_check erro "Nerd Fonts" "não encontradas"; (( problemas++ )); fi
 
   ui_secao "Serviços"
@@ -105,7 +106,7 @@ cmd_doctor() {
     if systemctl is-active -q xrdp; then ui_check ok "xrdp" "ativo"; else ui_check erro "xrdp" "parado"; (( problemas++ )); fi
     if grupo_ativo sysadmin; then
       if systemctl is-active -q docker; then ui_check ok "docker" "ativo"; else ui_check erro "docker" "parado"; (( problemas++ )); fi
-      if id -nG | grep -qw docker; then ui_check ok "grupo docker" "$USER"
+      if [[ " $(id -nG) " == *' docker '* ]]; then ui_check ok "grupo docker" "$USER"
       else ui_check aviso "grupo docker" "vale após o próximo login"; fi
     fi
   fi

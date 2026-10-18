@@ -196,13 +196,14 @@ __lvl9_ajuda_lista() {
   local en pt cmd desc nomes
   while IFS=$'\t' read -r _ en pt cmd desc; do
     if [[ $en == - ]]; then nomes=$pt; elif [[ $pt == - ]]; then nomes=$en; else nomes="$en · $pt"; fi
-    printf '\e[1;35m%-26s\e[0m %s \e[2m(%s)\e[0m\n' "$nomes" "$desc" "$cmd"
+    # largura por caractere (o printf %-Ns conta bytes, e o "·" tem 2)
+    printf '\e[1;35m%s%*s\e[0m %s \e[2m(%s)\e[0m\n' "$nomes" $(( 30 - ${#nomes} )) '' "$desc" "$cmd"
   done < <(grep -v '^#' "$LVL9_SISTEMA/bash/comandos.tsv")
 }
 __lvl9_ajuda_escolhe() {
   local linha
   command -v fzf &>/dev/null || { __lvl9_ajuda_lista; return 1; }
-  linha=$(__lvl9_ajuda_lista | fzf --ansi --no-sort --height=60% --layout=reverse --border=rounded \
+  linha=$(__lvl9_ajuda_lista | fzf --ansi --no-sort --tiebreak=begin,index --height=60% --layout=reverse --border=rounded \
     --prompt='lvl9 › ' --header='Enter: leva para o prompt · Esc: sai' \
     --color='border:#bb9af7,prompt:#7aa2f7,pointer:#bb9af7,header:#565f89,hl:#e0af68,hl+:#e0af68') || return 1
   linha=${linha%%  *}; linha=${linha%% · *}   # o primeiro nome (en, ou pt quando não há en)

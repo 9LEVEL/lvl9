@@ -65,8 +65,8 @@ confere "herdr (usuário e root)" bash -c 'test -x ~/.local/bin/herdr && sudo te
 echo "== comando lvl9 =="
 confere "lvl9 versao" lvl9 versao
 confere "lvl9 diff" lvl9 diff
-lvl9 doctor > /tmp/doctor.txt 2>&1
-confere "lvl9 doctor roda (serviços parados são esperados no container)" grep -q 'Ferramentas' /tmp/doctor.txt
+# sem systemd no container a seção de serviços é pulada; o resto precisa estar 100%
+confere "lvl9 doctor sem problemas" lvl9 doctor
 
 echo "RESULTADO: $ok ok, $erro erro(s)"
 exit $(( erro > 0 ))

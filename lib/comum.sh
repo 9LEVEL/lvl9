@@ -2,6 +2,9 @@
 # Não executa nada ao ser carregado: só define variáveis e funções.
 
 LVL9_REPO=${LVL9_REPO:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}
+# $USER nem sempre existe (Docker, cron, alguns su); o nome vem do próprio processo
+USER=${USER:-$(id -un)}
+export USER
 LVL9_SISTEMA=/usr/local/share/lvl9            # cópia do lvl9 usada por todos os usuários (do root)
 LVL9_CONFIG="$HOME/.config/lvl9"              # escolhas e preferências deste usuário
 LVL9_ESTADO="$HOME/.local/state/lvl9"         # logs, backups e lista de arquivos instalados

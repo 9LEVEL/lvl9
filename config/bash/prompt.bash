@@ -9,12 +9,13 @@
 PROMPT_TEMAS_DIR="/usr/local/share/lvl9/starship"
 PROMPT_TEMA_ARQ="$HOME/.config/lvl9/tema"
 PROMPT_TEMA=tokyo-night
+__lvl9_usuario=${USER:-$(id -un)}   # $USER nem sempre existe; o \u do PS1 vem do sistema
 if [[ -s $PROMPT_TEMA_ARQ ]]; then PROMPT_TEMA=$(<"$PROMPT_TEMA_ARQ")
 elif [[ -s $HOME/.config/starship/tema-atual ]]; then PROMPT_TEMA=$(<"$HOME/.config/starship/tema-atual")   # antes do lvl9
 fi
 
 # Título da janela: usuario@host: pasta
-__titulo_janela() { printf '\e]0;%s@%s: %s\a' "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"; }
+__titulo_janela() { printf '\e]0;%s@%s: %s\a' "$__lvl9_usuario" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"; }
 
 # IPs do prompt, detectados 1x por dia e compartilhados entre os terminais
 # (cache em ~/.cache/lvl9/ips; nos outros prompts é só uma comparação de data):
@@ -84,7 +85,7 @@ __prompt_parrot() {
   # "vis" é o mesmo texto sem cores, só para medir quanto "─" cabe até o relógio
   local esq="${r}┌─" vis="┌─"
   (( s )) && { esq+="[\[\e[1;91m\]✘ $s${r}]─"; vis+="[✘ $s]─"; }
-  esq+="[${u}"; vis+="[$USER"
+  esq+="[${u}"; vis+="[$__lvl9_usuario"
   [[ -n $SSH_CONNECTION ]] && { esq+="${y}@${c}\h"; vis+="@${HOSTNAME%%.*}"; }
   esq+="${r}]─[${g}\w${r}]"; vis+="]─[${PWD/#$HOME/\~}]"
   b=$(git branch --show-current 2>/dev/null)

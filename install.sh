@@ -88,7 +88,7 @@ declare -A ROTULO=(
   [rede]="Rede       nmap · doggo · gping · trippy · bandwhich · tcpdump"
 )
 sel_rot=(); for g in "${sel[@]}"; do sel_rot+=("${ROTULO[$g]}"); done
-escolhidos=$(IFS=,; ui_multipla "Grupos extras (espaço marca · enter confirma)" "${sel_rot[*]}" \
+escolhidos=$(IFS=,; ui_multipla "Grupos extras (x marca/desmarca · enter confirma)" "${sel_rot[*]}" \
   "${ROTULO[dev]}:dev" "${ROTULO[sysadmin]}:sysadmin" "${ROTULO[rede]}:rede") || exit 130
 LVL9_GRUPOS="base $(echo $escolhidos)"
 for g in dev sysadmin rede; do
@@ -118,12 +118,13 @@ if ui_confirma "Instalar Claude Code + statusbar-claude + herdr (usuário e root
 else LVL9_CLAUDE=nao; ui_texto "  Claude Code (não)"; fi
 
 # ─── 3. Confirmação ─────────────────────────────────────────────────
+sim_nao() { if [[ $1 == sim ]]; then echo sim; else echo não; fi; }
 printf '\n'
 ui_caixa "$(cor "$C_AZUL")${NEG}Pronto para instalar$RST" "" \
   "grupos     $LVL9_GRUPOS" \
   "prompt     $LVL9_TEMA" \
-  "tailscale  $LVL9_TAILSCALE" \
-  "claude     $LVL9_CLAUDE" \
+  "tailscale  $(sim_nao "$LVL9_TAILSCALE")" \
+  "claude     $(sim_nao "$LVL9_CLAUDE")" \
   "" \
   "$(cor "$C_CINZA")usuário $USER e root · backups em ~/.local/state/lvl9/backups$RST"
 printf '\n'

@@ -1,0 +1,99 @@
+# Estilo ParrotOS em 2 linhas, com relógio à direita:
+#   ┌─[✘ 1]─[user@host]─[~/pasta]─[ main !1]───────────────[󱎫 3s]─[ 10:12:03]
+#   └──╼ $
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = false
+command_timeout = 500
+
+format = """
+[┌─](red)\
+([\\[](red)$status[\\]─](red))\
+[\\[](red)$username([@](bold yellow)$hostname)[\\]─\\[](red)$directory[\\]](red)\
+([─\\[](red)$git_branch$git_status[\\]](red))\
+([─\\[](red)$python[\\]](red))\
+$fill\
+([\\[](red)$cmd_duration[\\]─](red))\
+([\\[](red)$jobs[\\]─](red))\
+([\\[](red)${env_var.LVL9_IP_LAN}${env_var.LVL9_IP_TS}[\\]─](red))\
+[\\[](red)$time[\\]](red)\
+$line_break\
+[└──╼](red) $custom"""
+
+[status]
+disabled = false
+style = "bold bright-red"
+format = "[✘ $status]($style)"
+
+[username]
+show_always = true
+style_user = "bright-white"
+style_root = "bold red"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = true
+ssh_symbol = " "
+style = "bold bright-cyan"
+format = "[$hostname$ssh_symbol]($style)"
+
+[directory]
+style = "green"
+read_only = " 󰌾"
+read_only_style = "red"
+truncation_length = 8
+truncate_to_repo = false
+format = "[$path]($style)[$read_only]($read_only_style)"
+
+[git_branch]
+symbol = ""
+style = "bold purple"
+format = "[$symbol$branch]($style)"
+
+[git_status]
+style = "yellow"
+format = "( [$all_status$ahead_behind]($style))"
+
+[python]
+symbol = ""
+style = "yellow"
+format = "[$symbol$virtualenv]($style)"
+detect_extensions = []
+detect_files = []
+
+[fill]
+symbol = "─"
+style = "red"
+
+[cmd_duration]
+min_time = 2000
+style = "yellow"
+format = "[󱎫 $duration]($style)"
+
+[jobs]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$number]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+style = "bright-white"
+format = "[ $time]($style)"
+
+# "$" amarelo para usuário comum, "#" vermelho para root (igual ao \$ do Parrot)
+[custom.root]
+when = '[ "$(id -u)" = 0 ]'
+shell = ["sh"]
+format = "[#](bold red) "
+
+[custom.user]
+when = '[ "$(id -u)" != 0 ]'
+shell = ["sh"]
+format = "[\\$](bold yellow) "
+
+# IPs (LAN da rota padrão + Tailscale), exportados pelo prompt.bash
+[env_var.LVL9_IP_LAN]
+format = "[󰩟 $env_value](green)"
+
+[env_var.LVL9_IP_TS]
+format = "[ 󰖂 $env_value](bright-cyan)"

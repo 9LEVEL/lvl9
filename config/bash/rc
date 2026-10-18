@@ -1,0 +1,258 @@
+# shellcheck shell=bash disable=SC2139  # aliases expandem na definição de propósito
+# /usr/local/share/lvl9/bash/rc — configuração do bash do lvl9 (https://github.com/9LEVEL/lvl9)
+# Inspirada no setup do Fábio Akita (Omarchy: default/bash). Carregada pelo ~/.bashrc do
+# usuário e do root; o "lvl9 update" atualiza este arquivo, então personalize no ~/.bashrc.
+
+LVL9_SISTEMA=/usr/local/share/lvl9
+
+# ─── PATH / ambiente ────────────────────────────────────────────────
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+export EDITOR="${EDITOR:-$(command -v nvim || command -v vim || echo nano)}"
+export SUDO_EDITOR="$EDITOR"
+export LANG="${LANG:-C.UTF-8}"
+
+# No Debian, o bat e o fd do apt vêm com outros nomes
+command -v batcat &>/dev/null && ! command -v bat &>/dev/null && alias bat='batcat'
+command -v fdfind &>/dev/null && ! command -v fd  &>/dev/null && alias fd='fdfind'
+# caminho real (depois do alias acima, "command -v bat" devolveria o texto do alias)
+__bat=$(type -P bat || type -P batcat)
+if [[ -n $__bat ]]; then
+  export BAT_THEME=ansi
+  export MANROFFOPT="-c"
+  export MANPAGER="sh -c 'col -bx | $__bat -l man -p'"
+  alias cat="$__bat --paging=never --style=plain"   # com pipe ou arquivo, age igual ao cat
+fi
+command -v btop &>/dev/null && alias top='btop'
+
+# ─── Histórico ──────────────────────────────────────────────────────
+shopt -s histappend checkwinsize cdspell autocd globstar
+HISTCONTROL=ignoreboth:erasedups
+HISTSIZE=32768
+HISTFILESIZE=$HISTSIZE
+HISTTIMEFORMAT='%F %T  '
+PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
+# ─── Autocomplete ───────────────────────────────────────────────────
+if [[ ! -v BASH_COMPLETION_VERSINFO && -f /usr/share/bash-completion/bash_completion ]]; then
+  source /usr/share/bash-completion/bash_completion
+fi
+
+# Readline (equivalente ao inputrc do Akita)
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind 'set mark-symlinked-directories on'
+bind 'set colored-stats on'
+bind 'set visible-stats on'
+bind 'set skip-completed-text on'
+bind 'set menu-complete-display-prefix on'
+bind '"\e[A": history-search-backward'   # ↑ busca no histórico pelo que já digitou
+bind '"\e[B": history-search-forward'    # ↓
+bind 'TAB: menu-complete'                # Tab cicla opções
+bind '"\e[Z": menu-complete-backward'    # Shift+Tab volta
+
+# ─── Arquivos / listagem ────────────────────────────────────────────
+if command -v eza &>/dev/null; then
+  # Tabela com cabeçalho: permissões, tamanho, dono, data, git
+  alias ls='eza -lh --header --group-directories-first --icons=auto --git --time-style=long-iso'
+  alias lsa='ls -a'
+  alias lss='ls --sort=size --reverse'   # maiores primeiro
+  alias lsd='ls -D'                       # só diretórios
+  alias lt='eza --tree --level=2 --long --header --icons=auto --git'
+  alias lta='lt -a'
+  alias l='eza --icons=auto --group-directories-first'   # grade simples
+else
+  alias ls='ls --color=auto --group-directories-first -h'
+  alias ll='ls -l'
+  alias lsa='ls -lA'
+  alias lt='find . -maxdepth 2 -not -path "*/.git*" | sort'
+fi
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias mkdir='mkdir -pv'
+
+# Segurança
+alias rm='rm -I --preserve-root'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Permite usar aliases depois do sudo (ex.: sudo ls)
+alias sudo='sudo '
+
+# ─── Navegação ──────────────────────────────────────────────────────
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias -- -='cd -'
+
+# zoxide: "cd projeto" pula para o diretório mais usado que bate com o nome
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init bash)"
+  alias cd='zd'
+  zd() {
+    if (( $# == 0 )); then builtin cd ~ || return
+    elif [[ -d $1 || $1 == - ]]; then builtin cd "$1" || return
+    else z "$@" || { echo "Diretório não encontrado"; return 1; }; pwd
+    fi
+  }
+fi
+
+# ─── fzf ────────────────────────────────────────────────────────────
+if command -v fzf &>/dev/null; then
+  # Ctrl+R histórico, Ctrl+T arquivos, Alt+C diretórios
+  eval "$(fzf --bash 2>/dev/null)"
+  alias ff="fzf --preview '${__bat:-cat} --style=numbers --color=always {} 2>/dev/null || cat {}'"
+  alias eff='$EDITOR "$(ff)"'   # escolhe arquivo e abre no editor
+fi
+unset __bat
+
+# ─── Ferramentas ────────────────────────────────────────────────────
+alias c='clear'
+alias cx='printf "\033[2J\033[3J\033[H" && claude'
+alias d='docker'
+alias dc='docker compose'
+alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias t='tmux attach || tmux new -s Work'
+alias tm='tmux new -A -s main'   # entra na sessão "main" (cria se não existir)
+alias reload='source ~/.bashrc && echo "bashrc recarregado"'
+alias brc='$EDITOR ~/.bashrc'
+alias h='history | tail -30'
+alias hg='history | grep'
+alias sctl='systemctl'
+alias jctl='journalctl -xe'
+alias logs='journalctl -f'
+n() { if (( $# == 0 )); then command "$EDITOR" .; else command "$EDITOR" "$@"; fi; }
+
+# ─── Git (mesmos atalhos do Akita) ─────────────────────────────────
+alias g='git'
+alias gs='git status -sb'
+alias ga='git add'
+alias gaa='git add -A'
+alias gd='git diff'
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias gcad='git commit -a --amend'
+alias gp='git push'
+alias gl='git pull'
+alias gco='git checkout'
+alias gsw='git switch'
+alias glog='git log --oneline --graph --decorate -20'
+
+# ─── Funções ────────────────────────────────────────────────────────
+# Compactar/descompactar (do Akita)
+compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
+alias decompress='tar -xzf'
+
+# Extrai qualquer formato
+extract() {
+  [[ -f $1 ]] || { echo "Uso: extract <arquivo>"; return 1; }
+  case $1 in
+    *.tar.gz|*.tgz) tar xzf "$1" ;;
+    *.tar.bz2)      tar xjf "$1" ;;
+    *.tar.xz)       tar xJf "$1" ;;
+    *.tar)          tar xf "$1" ;;
+    *.zip)          unzip "$1" ;;
+    *.gz)           gunzip "$1" ;;
+    *.bz2)          bunzip2 "$1" ;;
+    *.xz)           unxz "$1" ;;
+    *.7z)           7z x "$1" ;;
+    *)              echo "Formato não suportado: $1"; return 1 ;;
+  esac
+}
+
+# Cria diretório e entra nele
+mkcd() { mkdir -p "$1" && builtin cd "$1"; }
+
+# Backup rápido de arquivo: bak nginx.conf -> nginx.conf.bak-20261018-0930
+bak() { cp -a "$1" "$1.bak-$(date +%Y%m%d-%H%M)"; }
+
+# Servidor HTTP na pasta atual
+serve() { python3 -m http.server "${1:-8000}"; }
+
+# Port forwarding SSH: fip host 3000 [porta_local]
+fip() {
+  (( $# < 2 )) && { echo "Uso: fip <host> <porta_remota> [porta_local]"; return 1; }
+  ssh -N -L "${3:-$2}:localhost:$2" "$1"
+}
+
+# ─── Prompt (temas starship + IPs + prompt-tema) ────────────────────
+[[ -f $LVL9_SISTEMA/bash/prompt.bash ]] && source "$LVL9_SISTEMA/bash/prompt.bash"
+
+# ─── Aliases em inglês e pt-BR (catálogo: comandos.tsv) ────────────
+# Só cria o alias se o programa existir; "sudo X" confere o X.
+while IFS=$'\t' read -r __tipo __en __pt __cmd _; do
+  [[ $__tipo == alias ]] || continue
+  __exe=${__cmd#sudo }; __exe=${__exe%% *}
+  type -t "$__exe" &>/dev/null || continue
+  [[ $__en != - && $__en != "$__cmd" ]] && alias "$__en=$__cmd"
+  [[ $__pt != - ]] && alias "$__pt=$__cmd"
+done < <(grep -v '^#' "$LVL9_SISTEMA/bash/comandos.tsv" 2>/dev/null)
+unset __tipo __en __pt __cmd __exe
+
+# ─── Ajuda: Alt+H ou "lvl9 ajuda" ───────────────────────────────────
+# Lista o catálogo no fzf; o comando escolhido vai para o prompt, pronto para editar ou rodar.
+__lvl9_ajuda_lista() {
+  local en pt cmd desc nomes
+  while IFS=$'\t' read -r _ en pt cmd desc; do
+    if [[ $en == - ]]; then nomes=$pt; elif [[ $pt == - ]]; then nomes=$en; else nomes="$en · $pt"; fi
+    printf '\e[1;35m%-26s\e[0m %s \e[2m(%s)\e[0m\n' "$nomes" "$desc" "$cmd"
+  done < <(grep -v '^#' "$LVL9_SISTEMA/bash/comandos.tsv")
+}
+__lvl9_ajuda_escolhe() {
+  local linha
+  command -v fzf &>/dev/null || { __lvl9_ajuda_lista; return 1; }
+  linha=$(__lvl9_ajuda_lista | fzf --ansi --no-sort --height=60% --layout=reverse --border=rounded \
+    --prompt='lvl9 › ' --header='Enter: leva para o prompt · Esc: sai' \
+    --color='border:#bb9af7,prompt:#7aa2f7,pointer:#bb9af7,header:#565f89,hl:#e0af68,hl+:#e0af68') || return 1
+  linha=${linha%%  *}; linha=${linha%% · *}   # o primeiro nome (en, ou pt quando não há en)
+  printf '%s' "${linha%% *}"
+}
+__lvl9_ajuda_widget() {
+  local esc
+  esc=$(__lvl9_ajuda_escolhe) || return 0
+  READLINE_LINE="$esc "
+  READLINE_POINT=${#READLINE_LINE}
+}
+bind -x '"\eh": __lvl9_ajuda_widget'
+
+# "lvl9 tema/ajuda/ip" precisam mexer no shell atual; o resto vai para /usr/local/bin/lvl9
+lvl9() {
+  case ${1:-} in
+    tema) shift; prompt-tema "$@" ;;
+    ip) refresh-ip ;;
+    ajuda|help)
+      local esc linha
+      esc=$(__lvl9_ajuda_escolhe) || return 0
+      read -r -e -i "$esc " -p "$(printf '\e[1;35m❯\e[0m ')" linha || return 0
+      history -s "$linha"
+      eval "$linha"
+      ;;
+    *) command lvl9 "$@" ;;
+  esac
+}
+
+# mise (gerenciador de versões de linguagens, usado pelo Akita)
+command -v mise &>/dev/null && eval "$(mise activate bash)"
+
+# ─── Boas-vindas: fastfetch + dica do dia ───────────────────────────
+# Não aparece dentro do tmux, do vim, após "lvl9 tema" nem quando desligado:
+#   lvl9 fastfetch off · lvl9 dicas off
+__lvl9_pref() { grep -qx "$1=off" "$HOME/.config/lvl9/config" 2>/dev/null && return 1; return 0; }
+__lvl9_dica() {
+  local -a linhas
+  local en pt desc nomes
+  mapfile -t linhas < <(awk -F'\t' '$1 == "alias"' "$LVL9_SISTEMA/bash/comandos.tsv" 2>/dev/null)
+  (( ${#linhas[@]} )) || return 0
+  IFS=$'\t' read -r _ en pt _ desc <<< "${linhas[RANDOM % ${#linhas[@]}]}"
+  if [[ $en == - ]]; then nomes=$pt; elif [[ $pt == - ]]; then nomes=$en; else nomes="$en ou $pt"; fi
+  printf '\e[2m 💡 dica:\e[0m \e[1;35m%s\e[0m \e[2m— %s · Alt+H mostra todos\e[0m\n' "$nomes" "$desc"
+}
+if [[ -z ${LVL9_SILENCIO:-} && -z ${TMUX:-} && -z ${VIM:-} ]]; then
+  if __lvl9_pref fastfetch && command -v fastfetch &>/dev/null; then
+    fastfetch -c "$LVL9_SISTEMA/fastfetch.jsonc" 2>/dev/null
+  fi
+  __lvl9_pref dicas && __lvl9_dica
+fi
+unset LVL9_SILENCIO
+true   # o último comando define o $? do primeiro prompt

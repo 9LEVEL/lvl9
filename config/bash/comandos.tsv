@@ -1,0 +1,45 @@
+# Catálogo de comandos do lvl9 (separado por TAB). Fonte única para:
+#   · os aliases (nome em inglês e em pt-BR para o mesmo comando)
+#   · a ajuda interativa (Alt+H ou "lvl9 ajuda")
+#   · a dica que aparece ao abrir o terminal
+# tipo   alias = cria os aliases (só se o programa existir) · info = só documenta
+# en/pt  nomes do alias ("-" = não tem)
+#
+# tipo	en	pt	comando	descrição
+alias	sys	sistema	fastfetch -c /usr/local/share/lvl9/fastfetch.jsonc	informações do sistema: logo, CPU, memória, discos e IPs
+alias	monitor	monitorar	btop	monitor de CPU, memória, disco e rede (top também abre o btop)
+alias	disk	disco	duf	espaço livre em cada disco e partição
+alias	usage	pasta	dust	o que está ocupando espaço na pasta atual
+alias	proc	processos	procs	processos com cores e busca (ex.: proc nginx)
+alias	ports	portas	sudo ss -tulpn	portas abertas e qual programa está ouvindo
+alias	update	atualizar	sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y	atualiza todos os pacotes do sistema
+alias	lg	-	lazygit	git inteiro numa interface no terminal (commits, branches, stash)
+alias	lzd	-	lazydocker	Docker numa interface no terminal (containers, logs, imagens)
+alias	examples	exemplos	tldr	exemplos práticos de um comando (ex.: exemplos tar)
+alias	dns	-	doggo	consulta DNS moderna (ex.: dns google.com MX)
+alias	pingg	pingar	gping	ping com gráfico, aceita vários hosts (ex.: pingg 1.1.1.1 8.8.8.8)
+alias	route	rota	sudo trip	traceroute + mtr visual (ex.: rota google.com)
+alias	bw	banda	sudo bandwhich	quem está usando a rede, por processo e conexão
+alias	scan	varrer	nmap -T4 -F	scan rápido das 100 portas mais comuns (ex.: scan 192.168.1.0/24)
+alias	myip	meuip	curl -s ifconfig.me; echo	seu IP público
+alias	-	atualiza-ip	refresh-ip	atualiza os IPs (LAN e Tailscale) mostrados no prompt
+alias	-	extrair	extract	extrai qualquer arquivo compactado (zip, tar.gz, 7z...)
+alias	-	compactar	compress	compacta uma pasta em .tar.gz
+alias	-	servir	serve	servidor HTTP na pasta atual (porta 8000)
+alias	-	tema	prompt-tema	mostra ou troca o tema do prompt
+info	ls · lsa · lt	-	eza	listagem com ícones e git · lsa inclui ocultos · lt mostra em árvore
+info	cat	-	bat	cat com cores e números de linha (o original: \cat)
+info	cd <pasta>	-	zoxide	pula direto para a pasta mais usada com esse nome
+info	Ctrl+R	-	fzf	busca no histórico de comandos
+info	Ctrl+T	-	fzf	escolhe arquivos e cola no comando
+info	Alt+C	-	fzf	entra numa pasta escolhida na lista
+info	Alt+H	-	lvl9	esta ajuda: escolha um comando e ele vai para o prompt
+info	ff · eff	-	fzf	escolhe arquivo com preview · eff já abre no editor
+info	gs · gd · ga · gcm · gp · gl	-	git	git status · diff · add · commit -m · push · pull
+info	glog	-	git	histórico do git em grafo
+info	mkcd <pasta>	-	-	cria a pasta e entra nela
+info	bak <arquivo>	-	-	cópia de segurança com data e hora no nome
+info	fip <host> <porta>	-	ssh	túnel SSH: acessa localmente uma porta do servidor
+info	tm · t	-	tmux	sessão tmux "main" · reconecta ou cria a sessão Work
+info	cx	-	claude	limpa a tela e abre o Claude Code
+info	lvl9	-	lvl9	update · diff · doctor · tema · dicas on/off · fastfetch on/off

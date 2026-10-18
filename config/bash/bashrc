@@ -1,0 +1,17 @@
+# ~/.bashrc — criado pelo lvl9 (https://github.com/9LEVEL/lvl9)
+#
+# A configuração vem de /usr/local/share/lvl9/bash/rc, que o "lvl9 update" atualiza.
+# Este arquivo é seu: o lvl9 não mexe mais nele depois de criado.
+#   · personalizações: aqui embaixo
+#   · segredos e coisas só desta máquina: ~/.bashrc.local (fica fora de qualquer git)
+
+# Sai cedo se não for shell interativo
+[[ $- != *i* ]] && return
+
+[[ -f /usr/local/share/lvl9/bash/rc ]] && source /usr/local/share/lvl9/bash/rc
+
+# ─── suas personalizações ───────────────────────────────────────────
+
+
+# ─── por último: segredos e ajustes locais ──────────────────────────
+if [[ -f ~/.bashrc.local ]]; then source ~/.bashrc.local; fi

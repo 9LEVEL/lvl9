@@ -1,0 +1,48 @@
+# Ferramentas que o lvl9 instala de fontes externas, com versão fixada no versions.lock.
+# O tools/bump-versions.sh lê este arquivo, busca a última versão de cada uma e grava o lock.
+#
+# Colunas (separadas por espaços):
+#   nome     identificador no versions.lock
+#   grupo    base | dev | sysadmin | rede | claude   (os grupos da tela de escolha)
+#   tipo     bin   → asset de release (arquivo compactado ou binário solto)
+#            fonte → asset de release com fontes (.tar.xz)
+#            raw   → arquivo do repositório na tag da última release
+#            git   → último commit da branch padrão (verificado pelo hash do commit)
+#   repo     dono/repositório no GitHub
+#   amd64    bin/fonte: regex do nome do asset para x86_64 · raw: caminho no repositório · git: -
+#   arm64    idem, para aarch64
+#   instala  bin: binários a copiar para /usr/local/bin, "arquivo[:destino]" separados por vírgula;
+#            "@" é o próprio asset baixado (para binários soltos) · fonte: nome da pasta · outros: -
+#
+# nome          grupo     tipo   repo                          amd64                                          arm64                                           instala
+gum             base      bin    charmbracelet/gum             _Linux_x86_64\.tar\.gz$                        _Linux_arm64\.tar\.gz$                          gum
+starship        base      bin    starship/starship             x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            starship
+eza             base      bin    eza-community/eza             ^eza_x86_64-unknown-linux-musl\.tar\.gz$       ^eza_aarch64-unknown-linux-gnu\.tar\.gz$        eza
+bat             base      bin    sharkdp/bat                   x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            bat
+fd              base      bin    sharkdp/fd                    x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            fd
+ripgrep         base      bin    BurntSushi/ripgrep            x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            rg
+fzf             base      bin    junegunn/fzf                  linux_amd64\.tar\.gz$                          linux_arm64\.tar\.gz$                           fzf
+zoxide          base      bin    ajeetdsouza/zoxide            x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            zoxide
+jq              base      bin    jqlang/jq                     ^jq-linux-amd64$                               ^jq-linux-arm64$                                @:jq
+fastfetch       base      bin    fastfetch-cli/fastfetch       ^fastfetch-linux-amd64-polyfilled\.tar\.gz$    ^fastfetch-linux-aarch64-polyfilled\.tar\.gz$   fastfetch
+btop            base      bin    aristocratos/btop             x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            btop
+mise            base      bin    jdx/mise                      -linux-x64-musl$                               -linux-arm64-musl$                              @:mise
+gh              base      bin    cli/cli                       _linux_amd64\.tar\.gz$                         _linux_arm64\.tar\.gz$                          gh
+delta           dev       bin    dandavison/delta              x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-gnu\.tar\.gz$             delta
+lazygit         dev       bin    jesseduffield/lazygit         _linux_x86_64\.tar\.gz$                        _linux_arm64\.tar\.gz$                          lazygit
+tealdeer        dev       bin    tealdeer-rs/tealdeer          ^tealdeer-linux-x86_64-musl$                   ^tealdeer-linux-aarch64-musl$                   @:tldr
+yq              dev       bin    mikefarah/yq                  ^yq_linux_amd64$                               ^yq_linux_arm64$                                @:yq
+dust            sysadmin  bin    bootandy/dust                 x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            dust
+duf             sysadmin  bin    muesli/duf                    _linux_x86_64\.tar\.gz$                        _linux_arm64\.tar\.gz$                          duf
+procs           sysadmin  bin    dalance/procs                 x86_64-linux\.zip$                             aarch64-linux\.zip$                             procs
+lazydocker      sysadmin  bin    jesseduffield/lazydocker      _linux_x86_64\.tar\.gz$                        _linux_arm64\.tar\.gz$                          lazydocker
+doggo           rede      bin    mr-karan/doggo                ^doggo-linux-x86_64\.tar\.gz$                  ^doggo-linux-aarch64\.tar\.gz$                  doggo
+gping           rede      bin    orf/gping                     musl-x86_64\.tar\.gz$                          musl-arm64\.tar\.gz$                            gping
+trippy          rede      bin    fujiapple852/trippy           x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            trip
+bandwhich       rede      bin    imsnif/bandwhich              x86_64-unknown-linux-musl\.tar\.gz$            aarch64-unknown-linux-musl\.tar\.gz$            bandwhich
+jetbrainsmono   base      fonte  ryanoasis/nerd-fonts          ^JetBrainsMono\.tar\.xz$                       ^JetBrainsMono\.tar\.xz$                        JetBrainsMono
+caskaydiamono   base      fonte  ryanoasis/nerd-fonts          ^CascadiaMono\.tar\.xz$                        ^CascadiaMono\.tar\.xz$                         CaskaydiaMono
+vim-plug        base      raw    junegunn/vim-plug             plug.vim                                       plug.vim                                        -
+fzf-vim         base      raw    junegunn/fzf                  plugin/fzf.vim                                 plugin/fzf.vim                                  -
+halcyon-vim     base      git    julianol1berato/halcyon-vim   -                                              -                                               -
+statusbar       claude    git    9LEVEL/statusbar-claude       -                                              -                                               -

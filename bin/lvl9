@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+# lvl9 — comando do lvl9 depois de instalado (https://github.com/9LEVEL/lvl9)
+#   lvl9 update            busca a versão nova e reabre o instalador com as suas escolhas
+#   lvl9 diff              o que mudou na máquina em relação ao lvl9
+#   lvl9 doctor            confere se está tudo instalado e funcionando
+#   lvl9 tema [nome]       mostra ou troca o tema do prompt
+#   lvl9 ajuda             catálogo de comandos (também no Alt+H)
+#   lvl9 ip                atualiza os IPs do prompt
+#   lvl9 dicas on|off      dica ao abrir o terminal
+#   lvl9 fastfetch on|off  resumo do sistema ao abrir o terminal
+#   lvl9 versao            versão instalada
+set -uo pipefail
+
+LVL9_SISTEMA=/usr/local/share/lvl9
+CLONE="${LVL9_CLONE:-$HOME/.local/share/lvl9}"
+PREFS="$HOME/.config/lvl9/config"
+
+# lib do repositório clonado, se houver; senão a cópia do sistema
+if [[ -f $CLONE/lib/comum.sh ]]; then LVL9_REPO=$CLONE; else LVL9_REPO=$LVL9_SISTEMA; fi
+export LVL9_REPO
+# shellcheck source=../lib/comum.sh
+source "$LVL9_REPO/lib/comum.sh"
+# shellcheck source=../lib/ui.sh
+source "$LVL9_REPO/lib/ui.sh"
+
+uso() { sed -n '2,11p' "$0" | sed 's/^# \{0,1\}/  /'; }
+
+versao() { cat "$LVL9_SISTEMA/VERSAO" 2>/dev/null || echo "desconhecida"; }
+LVL9_VERSAO=$(versao)
+
+# ─── update ─────────────────────────────────────────────────────────
+cmd_update() {
+  (( EUID == 0 )) && { ui_erro "rode como o seu usuário (o lvl9 configura também o root)"; return 1; }
+  [[ -d $CLONE/.git ]] || { ui_erro "repositório não encontrado em $CLONE; reinstale com o boot.sh"; return 1; }
+  ui_secao "lvl9 update"
+  git -C "$CLONE" fetch -q origin || { ui_erro "não consegui buscar o GitHub"; return 1; }
+  local ref novos
+  ref=$(git -C "$CLONE" rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || echo origin/main)
+  novos=$(git -C "$CLONE" log --oneline "HEAD..$ref")
+  if [[ -z $novos ]]; then
+    ui_ok "você já está na última versão ($(git -C "$CLONE" describe --tags --always))"
+    ui_confirma "Reaplicar a instalação mesmo assim?" nao || return 0
+  else
+    ui_texto "novidades:"; printf '%s\n' "$novos" | sed 's/^/     /'
+    printf '\n'
+    git -C "$CLONE" merge -q --ff-only "$ref" || { ui_erro "o clone tem mudanças locais; resolva em $CLONE"; return 1; }
+  fi
+  exec bash "$CLONE/install.sh"
+}
+
+# ─── diff ───────────────────────────────────────────────────────────
+cmd_diff() {
+  local lista="$LVL9_ESTADO/arquivos.tsv" src dst iguais=0 dif=0 falta=0 ler=()
+  [[ -f $lista ]] || { ui_erro "nada registrado ainda (o lvl9 foi instalado?)"; return 1; }
+  ui_secao "lvl9 diff · máquina × repositório"
+  while IFS=$'\t' read -r src dst; do
+    [[ $src == config/bash/bashrc ]] && continue   # o ~/.bashrc é seu depois de criado
+    ler=(); e_do_sistema "$dst" && ler=(sudo)
+    if ! "${ler[@]}" test -e "$dst"; then
+      ui_erro "ausente   $dst"; (( falta++ ))
+    elif "${ler[@]}" cmp -s "$LVL9_REPO/$src" "$dst"; then
+      (( iguais++ ))
+    else
+      ui_aviso "diferente $dst  ←  $src"; (( dif++ ))
+      if command -v delta &>/dev/null; then
+        diff -u --label "lvl9: $src" --label "máquina: $dst" "$LVL9_REPO/$src" <("${ler[@]}" cat "$dst") | delta --paging=never
+      else
+        diff -u --label "lvl9: $src" --label "máquina: $dst" "$LVL9_REPO/$src" <("${ler[@]}" cat "$dst") | sed 's/^/     /'
+      fi
+    fi
+  done < "$lista"
+  printf '\n'
+  ui_texto "$iguais iguais · $dif diferentes · $falta ausentes"
+  (( dif + falta == 0 )) || ui_texto "lvl9 update reaplica a versão do repositório (com backup)"
+}
+
+# ─── doctor ─────────────────────────────────────────────────────────
+cmd_doctor() {
+  local nome grupo tipo problemas=0 escolhas="$HOME/.config/lvl9/escolhas" LVL9_GRUPOS="base dev sysadmin rede"
+  # shellcheck disable=SC1090
+  [[ -f $escolhas ]] && source "$escolhas"
+  lvl9_os
+  ui_banner
+  ui_secao "Sistema"
+  if lvl9_os_suportado; then ui_check ok "Sistema" "$OS_NOME"; else ui_check aviso "Sistema" "$OS_NOME (não testado)"; fi
+  ui_check ok "Arquitetura" "$(lvl9_arch)"
+  local fuso; fuso=$(readlink -f /etc/localtime | sed 's|.*/zoneinfo/||')
+  if [[ $fuso == America/Sao_Paulo ]]; then ui_check ok "Fuso horário" "$fuso"; else ui_check aviso "Fuso horário" "$fuso"; (( problemas++ )); fi
+  if grep -qs 'lvl9/bash/rc' "$HOME/.bashrc"; then ui_check ok "~/.bashrc" "carrega o lvl9"; else ui_check erro "~/.bashrc" "não carrega o lvl9"; (( problemas++ )); fi
+  ui_check ok "Tema do prompt" "$(cat "$HOME/.config/lvl9/tema" 2>/dev/null || echo tokyo-night)"
+
+  ui_secao "Ferramentas (versões do lock)"
+  while read -r nome grupo tipo _; do
+    [[ -z $nome || $nome == \#* || $tipo != bin ]] && continue
+    grupo_ativo "$grupo" || continue
+    lock_le "$nome" 2>/dev/null || continue
+    if bin_atualizado "$nome"; then ui_check ok "$nome" "$LOCK_VERSAO"
+    else ui_check erro "$nome" "faltando ou fora da versão $LOCK_VERSAO"; (( problemas++ )); fi
+  done < "$LVL9_REPO/ferramentas.tsv"
+  if fc-list | grep -q 'JetBrainsMono Nerd Font'; then ui_check ok "Nerd Fonts" "JetBrainsMono, CaskaydiaMono"
+  else ui_check erro "Nerd Fonts" "não encontradas"; (( problemas++ )); fi
+
+  ui_secao "Serviços"
+  if tem_systemd; then
+    if systemctl is-active -q xrdp; then ui_check ok "xrdp" "ativo"; else ui_check erro "xrdp" "parado"; (( problemas++ )); fi
+    if grupo_ativo sysadmin; then
+      if systemctl is-active -q docker; then ui_check ok "docker" "ativo"; else ui_check erro "docker" "parado"; (( problemas++ )); fi
+      if id -nG | grep -qw docker; then ui_check ok "grupo docker" "$USER"
+      else ui_check aviso "grupo docker" "vale após o próximo login"; fi
+    fi
+  fi
+  if [[ ${LVL9_TAILSCALE:-nao} == sim ]]; then
+    if tailscale status &>/dev/null; then ui_check ok "tailscale" "conectado"
+    else ui_check aviso "tailscale" "instalado, não conectado (sudo tailscale up)"; fi
+  fi
+  if [[ ${LVL9_CLAUDE:-nao} == sim ]]; then
+    if [[ -x $HOME/.local/bin/claude ]]; then ui_check ok "Claude Code" "$("$HOME/.local/bin/claude" --version 2>/dev/null | head -1)"
+    else ui_check erro "Claude Code" "não instalado"; (( problemas++ )); fi
+    if jq -e '.statusLine.command | test("statusline")' "$HOME/.claude/settings.json" &>/dev/null; then ui_check ok "statusbar" "ligada"
+    else ui_check erro "statusbar" "desligada"; (( problemas++ )); fi
+    if [[ -x $HOME/.local/bin/herdr ]]; then ui_check ok "herdr" "$("$HOME/.local/bin/herdr" --version 2>/dev/null | head -1)"
+    else ui_check erro "herdr" "não instalado"; (( problemas++ )); fi
+  fi
+  printf '\n'
+  if (( problemas == 0 )); then ui_ok "tudo certo"; else ui_aviso "$problemas problema(s) · lvl9 update reaplica a instalação"; fi
+  (( problemas == 0 ))
+}
+
+# ─── preferências ───────────────────────────────────────────────────
+cmd_pref() {   # cmd_pref chave on|off
+  local chave=$1 valor=${2:-}
+  [[ $valor == on || $valor == off ]] || { ui_texto "uso: lvl9 $chave on|off"; return 1; }
+  mkdir -p "${PREFS%/*}"; touch "$PREFS"
+  { grep -v "^$chave=" "$PREFS"; echo "$chave=$valor"; } > "$PREFS.novo" && mv "$PREFS.novo" "$PREFS"
+  ui_ok "$chave: $valor (vale nos próximos terminais)"
+}
+
+# ─── desktop (roda no login quando a instalação foi feita fora da sessão XFCE) ──
+cmd_desktop() {
+  # shellcheck source=../lib/desktop.sh
+  source "$LVL9_REPO/lib/desktop.sh"
+  desktop_aplica || return 1
+  rm -f "$HOME/.config/autostart/lvl9-desktop.desktop"
+}
+
+case ${1:-} in
+  update|atualizar)  cmd_update ;;
+  diff)              cmd_diff ;;
+  doctor|diagnostico) cmd_doctor ;;
+  dicas)             cmd_pref dicas "${2:-}" ;;
+  fastfetch)         cmd_pref fastfetch "${2:-}" ;;
+  desktop)           cmd_desktop ;;
+  versao|version|--version|-v) echo "lvl9 $(versao)" ;;
+  tema|ajuda|help|ip)
+    ui_texto "\"lvl9 $1\" funciona no terminal interativo (abra um terminal novo se acabou de instalar)" ;;
+  ''|-h|--help)      ui_banner; printf '\n'; uso ;;
+  *)                 ui_erro "comando desconhecido: $1"; uso; exit 2 ;;
+esac

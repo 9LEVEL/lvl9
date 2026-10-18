@@ -1,0 +1,7 @@
+// lvl9: sem isto, toda sessão xrdp pede senha para "create a color managed device".
+// Libera só as ações do colord (perfis de cor) para sessões remotas.
+polkit.addRule(function (action, subject) {
+  if (action.id.indexOf("org.freedesktop.color-manager.") === 0 && !subject.local) {
+    return polkit.Result.YES;
+  }
+});

@@ -1,0 +1,23 @@
+// lvl9 — resumo do sistema ao abrir o terminal e no comando "sys"/"sistema".
+// Desligar ao abrir o terminal: lvl9 fastfetch off
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": { "type": "small", "padding": { "top": 1, "left": 1, "right": 3 } },
+  "display": {
+    "separator": " ",
+    "color": { "keys": "blue", "title": "magenta" },
+  },
+  "modules": [
+    "title",
+    { "type": "os", "key": "sistema   " },
+    { "type": "kernel", "key": "kernel    " },
+    { "type": "uptime", "key": "ligado há " },
+    { "type": "packages", "key": "pacotes   " },
+    { "type": "terminal", "key": "terminal  " },
+    { "type": "cpu", "key": "cpu       " },
+    { "type": "memory", "key": "memória   " },
+    { "type": "disk", "key": "disco /   ", "folders": "/" },
+    { "type": "localip", "key": "ip lan    ", "showPrefixLen": false },
+    { "type": "localip", "key": "tailscale ", "showPrefixLen": false, "defaultRouteOnly": false, "namePrefix": "tailscale" }
+  ]
+}

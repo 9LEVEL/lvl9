@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Verificações depois da instalação (roda como o usuário de teste, dentro do container)
+set -uo pipefail
+source ~/.local/share/lvl9/lib/comum.sh
+ok=0 erro=0
+confere() {   # confere "descrição" comando...
+  local d=$1; shift
+  if "$@" &>/tmp/verifica.out; then echo "  ✔ $d"; (( ok++ ))
+  else echo "  ✘ $d"; sed 's/^/      /' /tmp/verifica.out | tail -5; (( erro++ )); fi
+}
+sem_erros() { ! grep -qiE 'erro|error|not found|não encontrad|command not found|syntax|line [0-9]+:' "$1"; }
+shell_interativo() {   # shell_interativo [sudo] → abre bash -i num pty e captura a saída
+  script -qc "$* bash -i -c 'alias disco >/dev/null && type prompt-tema >/dev/null && echo SHELL_OK'" /dev/null
+}
+
+echo "== binários do lock =="
+while read -r nome grupo tipo _ _ _ instala; do
+  [[ -z $nome || $nome == \#* || $tipo != bin ]] && continue
+  confere "$nome" bin_atualizado "$nome"
+  for b in ${instala//,/ }; do confere "  /usr/local/bin/${b#*:}" test -x "/usr/local/bin/${b#*:}"; done
+done < ~/.local/share/lvl9/ferramentas.tsv
+
+echo "== sistema =="
+confere "fuso America/Sao_Paulo" bash -c '[[ $(readlink -f /etc/localtime) == */America/Sao_Paulo ]]'
+confere "locale pt_BR.UTF-8" bash -c 'locale -a | grep -qiE "^pt_BR\.utf-?8$"'
+confere "Nerd Fonts" bash -c 'fc-list | grep -q "JetBrainsMono Nerd Font" && fc-list | grep -q "CaskaydiaMono Nerd Font"'
+
+echo "== shell =="
+confere "bashrc do usuário carrega o lvl9" grep -q 'lvl9/bash/rc' ~/.bashrc
+confere "bashrc do root carrega o lvl9" sudo grep -q 'lvl9/bash/rc' /root/.bashrc
+shell_interativo > /tmp/shell-usuario.txt 2>&1
+confere "shell interativo do usuário sem erros" bash -c 'grep -q SHELL_OK /tmp/shell-usuario.txt && ! grep -qiE "erro|command not found|syntax|: line [0-9]" /tmp/shell-usuario.txt'
+script -qc "sudo -i bash -i -c 'type prompt-tema >/dev/null && echo SHELL_OK'" /dev/null > /tmp/shell-root.txt 2>&1
+confere "shell interativo do root sem erros" bash -c 'grep -q SHELL_OK /tmp/shell-root.txt && ! grep -qiE "erro|command not found|syntax|: line [0-9]" /tmp/shell-root.txt'
+for t in /usr/local/share/lvl9/starship/*.toml; do
+  confere "tema $(basename "$t" .toml) renderiza" bash -c "STARSHIP_CONFIG=$t starship prompt >/dev/null"
+done
+confere "fastfetch com a config do lvl9" fastfetch -c /usr/local/share/lvl9/fastfetch.jsonc --pipe
+
+echo "== vim, node, tmux =="
+confere "node LTS via mise (usuário)" mise exec -- node --version
+confere "node LTS via mise (root)" sudo -H /usr/local/bin/mise exec -- node --version
+confere "vim: halcyon + :FZF + 10 plugins" bash -c 'vim -E -s -u ~/.vimrc -c "if !exists(\":FZF\") | cquit | endif" -c "if g:colors_name !=# \"halcyon\" | cquit | endif" -c "qa!" </dev/null && [[ $(ls ~/.vim/plugged | wc -l) -ge 10 ]]'
+confere "vim do root: plugins" sudo bash -c '[[ $(ls /root/.vim/plugged | wc -l) -ge 10 ]]'
+confere "tmux.conf válido" tmux -f ~/.tmux.conf start-server \; kill-server
+
+echo "== desktop e serviços =="
+confere "xrdp + xorgxrdp" dpkg -s xrdp xorgxrdp
+confere "flameshot" dpkg -s flameshot
+confere "XFCE" command -v xfce4-session
+confere "esquema Tokyo Night do terminal" test -f /usr/share/xfce4/terminal/colorschemes/lvl9-tokyo-night.theme
+confere "ajuste do XFCE agendado para o login" test -f ~/.config/autostart/lvl9-desktop.desktop
+confere "regra polkit do colord" sudo test -f /etc/polkit-1/rules.d/45-lvl9-colord.rules
+confere "docker" command -v docker
+confere "usuário no grupo docker" bash -c 'getent group docker | grep -qw teste'
+confere "tailscale" command -v tailscale
+
+echo "== Claude Code =="
+confere "claude (usuário)" ~/.local/bin/claude --version
+confere "claude (root)" sudo test -x /root/.local/bin/claude
+confere "statusbar no settings.json (usuário)" jq -e '.statusLine.command | test("statusline")' ~/.claude/settings.json
+confere "statusbar no settings.json (root)" sudo jq -e '.statusLine.command | test("statusline")' /root/.claude/settings.json
+confere "herdr (usuário e root)" bash -c 'test -x ~/.local/bin/herdr && sudo test -x /root/.local/bin/herdr'
+
+echo "== comando lvl9 =="
+confere "lvl9 versao" lvl9 versao
+confere "lvl9 diff" lvl9 diff
+lvl9 doctor > /tmp/doctor.txt 2>&1
+confere "lvl9 doctor roda (serviços parados são esperados no container)" grep -q 'Ferramentas' /tmp/doctor.txt
+
+echo "RESULTADO: $ok ok, $erro erro(s)"
+exit $(( erro > 0 ))

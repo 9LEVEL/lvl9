@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=lvl9: ajustes do XFCE
+Comment=Aplica fonte, cores do terminal e atalhos do flameshot uma vez e se remove
+Exec=/usr/local/bin/lvl9 desktop
+OnlyShowIn=XFCE;
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

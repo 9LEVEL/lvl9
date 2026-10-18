@@ -1,0 +1,61 @@
+# versions.lock — gerado por tools/bump-versions.sh; não edite à mão.
+# O instalador só instala o que está aqui e confere o sha256 de cada download
+# (para os itens git, a última coluna é o hash completo do commit).
+#
+# nome         arch   versão           url sha256
+gum            amd64  v2.0.2           https://github.com/charmbracelet/gum/releases/download/v2.0.2/gum_2.0.2_Linux_x86_64.tar.gz d842e06d93dbed90af48cb8dd10698db6f22e331fc40346bb37bbc753109edc2
+gum            arm64  v2.0.2           https://github.com/charmbracelet/gum/releases/download/v2.0.2/gum_2.0.2_Linux_arm64.tar.gz 8ebf8b54ec1e8c81f2bb58b59ff9b70998186a4d11375f0cf357b80e0ccfa1d5
+starship       amd64  v1.27.0          https://github.com/starship/starship/releases/download/v1.27.0/starship-x86_64-unknown-linux-musl.tar.gz 10c8eb4cb3b761d9bf59ea828444c2dab36c900b7d69a69e08814b286969df89
+starship       arm64  v1.27.0          https://github.com/starship/starship/releases/download/v1.27.0/starship-aarch64-unknown-linux-musl.tar.gz 341f5cbf24699fa0b27ec88965ad25f862ea09e15d35a543fd6ffdff1d2aa00d
+eza            amd64  v0.23.5          https://github.com/eza-community/eza/releases/download/v0.23.5/eza_x86_64-unknown-linux-musl.tar.gz e06eebab74b73d6b7d51a796a353824b001bea82df077706382e100815d28904
+eza            arm64  v0.23.5          https://github.com/eza-community/eza/releases/download/v0.23.5/eza_aarch64-unknown-linux-gnu.tar.gz 40b87ae8628aa2ff0f0d2dc24ab52f689631366385c3da630bae745671fd71ec
+bat            amd64  v0.26.1          https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-unknown-linux-musl.tar.gz 0dcd8ac79732c0d5b136f11f4ee00e581440e16a44eab5b3105b611bbf2cf191
+bat            arm64  v0.26.1          https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-aarch64-unknown-linux-musl.tar.gz 6369242c584065f195fb20cb36fbd7cb63ae690605bbe89868a7596b596c2c23
+fd             amd64  v10.5.0          https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-unknown-linux-musl.tar.gz 761c72dc8e120d85b22292063be8a796e2eeb20eb3e4f38b8fa2343ccf3514a7
+fd             arm64  v10.5.0          https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-aarch64-unknown-linux-musl.tar.gz d76c4317f7d5dba69f8a2a15856c90c777e7f0dd4e85f0de8c76de6992c374d4
+ripgrep        amd64  15.2.0           https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz 33e15bcf1624b25cdd2a55813a47a2f95dbe126268203e76aa6a585d1e7b149c
+ripgrep        arm64  15.2.0           https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-aarch64-unknown-linux-musl.tar.gz 800b1e7206afe799dfb5a6901f23147cfaabe0e52210538100f61e86e1740915
+fzf            amd64  v0.74.5          https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_amd64.tar.gz d47d7f882972c7d674dbbba998ffa4116e68379616ffac7695d0671e9a722c5f
+fzf            arm64  v0.74.5          https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_arm64.tar.gz cf058001da21724a469b714a29cf4aab9cbe860d218a0d6c1b5b661efad7784c
+zoxide         amd64  v0.10.0          https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-x86_64-unknown-linux-musl.tar.gz 2d93385b99f3e82cf2701609a1bffcad863fbeb75aa3fe7eb6be4d29be68b1ae
+zoxide         arm64  v0.10.0          https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641
+jq             amd64  jq-1.8.2         https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-linux-amd64 b1c22172dd303f3be49e935aa56aa48a8b7a46e0bc838b4997d3bb451495870f
+jq             arm64  jq-1.8.2         https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-linux-arm64 8b85c817833814ddca00a144c33705546355afccf0cf39b188f3cdb48b852309
+fastfetch      amd64  2.70.0           https://github.com/fastfetch-cli/fastfetch/releases/download/2.70.0/fastfetch-linux-amd64-polyfilled.tar.gz 4c07f37971ff9b6627519c18c2a471bb48253e55096cdd7d0c24b751ecfdeca7
+fastfetch      arm64  2.70.0           https://github.com/fastfetch-cli/fastfetch/releases/download/2.70.0/fastfetch-linux-aarch64-polyfilled.tar.gz 6fc72549d097b3b1e2b35ef4677265da4cc23f07f253b5144d1662214cc14f37
+btop           amd64  v1.4.7           https://github.com/aristocratos/btop/releases/download/v1.4.7/btop-x86_64-unknown-linux-musl.tar.gz 5099054dd6a101bd12eb6ff3702a9a6a3f57aaa27923a0da478ae5b517faf335
+btop           arm64  v1.4.7           https://github.com/aristocratos/btop/releases/download/v1.4.7/btop-aarch64-unknown-linux-musl.tar.gz 6270de0ef4c84cf0eea61cb148b3ad9ae91a11e9c3309867ffc6b3751024c252
+mise           amd64  v2026.10.13      https://github.com/jdx/mise/releases/download/v2026.10.13/mise-v2026.10.13-linux-x64-musl 6766ee30f68cea686dae555ea999c8e11abb1dc2acc50c41fcf5c0442b5eb9fb
+mise           arm64  v2026.10.13      https://github.com/jdx/mise/releases/download/v2026.10.13/mise-v2026.10.13-linux-arm64-musl 600bfc6f10542455aae93b3780627b5301e6e688779f09f4ef42852c54ce11df
+gh             amd64  v2.102.0         https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_linux_amd64.tar.gz bb766f710eef8ede859c18578c72c327597cd4c8a85b06001b1f3843c6019386
+gh             arm64  v2.102.0         https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_linux_arm64.tar.gz 7862c86c72f43df3a2d93ddde6f473285b4e2af61b494849846827e513ef6484
+delta          amd64  0.20.1           https://github.com/dandavison/delta/releases/download/0.20.1/delta-0.20.1-x86_64-unknown-linux-musl.tar.gz 69dcb4043f55c29118f408c6efd30115e0a4e0a6709253343b8c8fa814ab4a31
+delta          arm64  0.20.1           https://github.com/dandavison/delta/releases/download/0.20.1/delta-0.20.1-aarch64-unknown-linux-gnu.tar.gz da7f4338f593572ff426ae153e0870e2fdc72729416eff551b40cdeb67940db8
+lazygit        amd64  v0.66.2          https://github.com/jesseduffield/lazygit/releases/download/v0.66.2/lazygit_0.66.2_linux_x86_64.tar.gz 158efc9ddfa1241fab5fb3526bb442c8dc6c4b1904d73213b9e4e93e03c52034
+lazygit        arm64  v0.66.2          https://github.com/jesseduffield/lazygit/releases/download/v0.66.2/lazygit_0.66.2_linux_arm64.tar.gz 79a3161eeb642f0473e23db6341f7baabd4a5933e921a9c1167c5d5c765c41a4
+tealdeer       amd64  v1.9.0           https://github.com/tealdeer-rs/tealdeer/releases/download/v1.9.0/tealdeer-linux-x86_64-musl dc7263b550e90c0689ea2cb434e3144469805d5dddecbb1f7fc534e1185b7408
+tealdeer       arm64  v1.9.0           https://github.com/tealdeer-rs/tealdeer/releases/download/v1.9.0/tealdeer-linux-aarch64-musl a748f181c00933980cb850f4a24199c45900fc523787f6c524232a6bfc66b895
+yq             amd64  v4.54.1          https://github.com/mikefarah/yq/releases/download/v4.54.1/yq_linux_amd64 8e34fc298390875de416e6a4afcb8cabeceb25d9aa8506c1a2f9353cf702ea5f
+yq             arm64  v4.54.1          https://github.com/mikefarah/yq/releases/download/v4.54.1/yq_linux_arm64 189088da0c6429ec5178dfaab1a114805f6cab0b61b165ab236efedf1d57a71b
+dust           amd64  v1.2.6           https://github.com/bootandy/dust/releases/download/v1.2.6/dust-v1.2.6-x86_64-unknown-linux-musl.tar.gz cbf2cb5c9d6227e46fc4b29c03dc43b8632020dfc5cf269d263d6e29c399e044
+dust           arm64  v1.2.6           https://github.com/bootandy/dust/releases/download/v1.2.6/dust-v1.2.6-aarch64-unknown-linux-musl.tar.gz a51cf42a4654864837cc116eaca914271d7a09a9c2a60de90ecc2187b8d855a7
+duf            amd64  v0.9.1           https://github.com/muesli/duf/releases/download/v0.9.1/duf_0.9.1_linux_x86_64.tar.gz 5add851e7062c5e56939abb664705e4d14fa2d06289490aff31d51f153832de7
+duf            arm64  v0.9.1           https://github.com/muesli/duf/releases/download/v0.9.1/duf_0.9.1_linux_arm64.tar.gz 22ea0ad29f6610bf443aa351e600de97e47a9b380ef58316606a84bb8f595216
+procs          amd64  v0.14.12         https://github.com/dalance/procs/releases/download/v0.14.12/procs-v0.14.12-x86_64-linux.zip 81964faf9d5cd0e9f399d5d0954fb6fe4d4d9f7d3cbec4507633df5a45b11713
+procs          arm64  v0.14.12         https://github.com/dalance/procs/releases/download/v0.14.12/procs-v0.14.12-aarch64-linux.zip 74b4f82acc6fe553cbd5af20ba0baac420b42bef9bb0cbb38fef14b8317d9f91
+lazydocker     amd64  v0.25.2          https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_x86_64.tar.gz 0d9dbfc26068b218e7ed84b104748cadc6e3cf733c0afd35465306fb39b9523c
+lazydocker     arm64  v0.25.2          https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_arm64.tar.gz 005c38b685aaa557e7d646d83a3dadb5024340eeed8c6a2e1949eee6f530de23
+doggo          amd64  v1.4.1           https://github.com/mr-karan/doggo/releases/download/v1.4.1/doggo-linux-x86_64.tar.gz d4785ab19287c5973cbd0c3390945c3edce3105b7c9aaa5a08bc19c7d7f2dcbc
+doggo          arm64  v1.4.1           https://github.com/mr-karan/doggo/releases/download/v1.4.1/doggo-linux-aarch64.tar.gz 69b9ce66545744459c0287bf3df6ce8a64e114b94d2dd617ea6119314c73b992
+gping          amd64  gping-v1.21.0    https://github.com/orf/gping/releases/download/gping-v1.21.0/gping-Linux-musl-x86_64.tar.gz cea59e22f6faf941f054cf0925433a2e3e4e6c42dc5c778b0265279a5056aeec
+gping          arm64  gping-v1.21.0    https://github.com/orf/gping/releases/download/gping-v1.21.0/gping-Linux-musl-arm64.tar.gz 75e485e9ae081b4478b7c9fea0585a125dd7e640334cdbdec852af6238c3f1f1
+trippy         amd64  0.13.0           https://github.com/fujiapple852/trippy/releases/download/0.13.0/trippy-0.13.0-x86_64-unknown-linux-musl.tar.gz aa2b7b2a0773f3cc04da691100419049950b690fe3736d25e24ac955b63d6056
+trippy         arm64  0.13.0           https://github.com/fujiapple852/trippy/releases/download/0.13.0/trippy-0.13.0-aarch64-unknown-linux-musl.tar.gz 73af939aa94e9e0f07cac2b3c8177e02a6b1c3be88299d85988e02be81ae7004
+bandwhich      amd64  v0.23.1          https://github.com/imsnif/bandwhich/releases/download/v0.23.1/bandwhich-v0.23.1-x86_64-unknown-linux-musl.tar.gz fec93e01c393cd3ef8aa168a675dffb8fa4841d5fd93390b5d14f238ae29e59c
+bandwhich      arm64  v0.23.1          https://github.com/imsnif/bandwhich/releases/download/v0.23.1/bandwhich-v0.23.1-aarch64-unknown-linux-musl.tar.gz 6bbf084e5280a1a10833b8f466728ff428a7d637282c0487d6fcda0c4781357a
+jetbrainsmono  all    v3.5.1           https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/JetBrainsMono.tar.xz 04d5e8f903693f9dd13e16f867e994834e681eb3c72c0d337a770dcda09010cf
+caskaydiamono  all    v3.5.1           https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/CascadiaMono.tar.xz e4fe0248bbe2558e907d26b55ed287403972f946239a4ea3f7a8afd3365ad6ba
+vim-plug       all    0.14.0           https://raw.githubusercontent.com/junegunn/vim-plug/0.14.0/plug.vim 20b4c895f98d13848204698068c4dd031730d4e7c9c4b630d6273b9b9afcdcdb
+fzf-vim        all    v0.74.5          https://raw.githubusercontent.com/junegunn/fzf/v0.74.5/plugin/fzf.vim 89ff9009697ab757544cdde643e254a04de2d540f0fdd757dbdbc8149fad479a
+halcyon-vim    all    027c5675b9ed     https://github.com/julianol1berato/halcyon-vim.git 027c5675b9ed8a37f49896fd6e648e6e5ee6397a
+statusbar      all    266149274fe9     https://github.com/9LEVEL/statusbar-claude.git 266149274fe9ef60174b528d399725d1eef9e7b2

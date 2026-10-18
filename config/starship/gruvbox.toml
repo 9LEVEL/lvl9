@@ -1,0 +1,171 @@
+# Gruvbox Rainbow powerline em 2 linhas (base: preset "gruvbox-rainbow" do starship).
+# Linha 1: SO/usuário@host, pasta, git, linguagens  ·····  erro, duração, relógio
+# Linha 2: ❯
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = true
+command_timeout = 500
+palette = 'gruvbox_dark'
+
+format = """
+[](color_orange)\
+$os\
+$username\
+$hostname\
+[ ](bg:color_orange)\
+[](bg:color_yellow fg:color_orange)\
+$directory\
+[](fg:color_yellow bg:color_aqua)\
+$git_branch\
+$git_status\
+[](fg:color_aqua bg:color_blue)\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$python\
+[](fg:color_blue bg:color_bg3)\
+$docker_context\
+[](fg:color_bg3)\
+$fill\
+$status\
+$cmd_duration\
+$jobs\
+${env_var.LVL9_IP_LAN}\
+${env_var.LVL9_IP_TS}\
+$time\
+$line_break\
+$character"""
+
+[palettes.gruvbox_dark]
+color_fg0 = '#fbf1c7'
+color_bg1 = '#3c3836'
+color_bg3 = '#665c54'
+color_blue = '#458588'
+color_aqua = '#689d6a'
+color_green = '#98971a'
+color_orange = '#d65d0e'
+color_purple = '#b16286'
+color_red = '#cc241d'
+color_yellow = '#d79921'
+
+[os]
+disabled = false
+style = "bg:color_orange fg:color_fg0"
+format = "[$symbol ]($style)"
+
+[os.symbols]
+Debian = "󰣚"
+Ubuntu = "󰕈"
+Arch = "󰣇"
+Linux = "󰌽"
+
+[username]
+show_always = true
+style_user = "bg:color_orange fg:color_fg0"
+style_root = "bg:color_orange fg:#1d2021 bold"
+format = '[ $user]($style)'
+
+[hostname]
+ssh_only = true
+ssh_symbol = ""
+style = "bg:color_orange fg:color_fg0"
+format = '[@$hostname $ssh_symbol]($style)'
+
+[directory]
+style = "fg:color_fg0 bg:color_yellow"
+read_only = "󰌾 "
+read_only_style = "fg:color_red bg:color_yellow"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documentos" = "󰈙 Documentos"
+"Downloads" = " Downloads"
+"Imagens" = " Imagens"
+"Músicas" = "󰝚 Músicas"
+"desenvolvimento" = "󰲋 desenvolvimento"
+
+[git_branch]
+symbol = ""
+style = "bg:color_aqua"
+format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_status]
+style = "bg:color_aqua"
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+
+[c]
+symbol = " "
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[php]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[java]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[python]
+symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version)( \($virtualenv\)) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:color_bg3"
+format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
+
+[fill]
+symbol = " "
+
+# ── lado direito (pílulas arredondadas) ──
+[status]
+disabled = false
+format = '[](fg:color_red)[ ✘ $status ](bg:color_red fg:color_fg0)[](fg:color_red) '
+
+[cmd_duration]
+min_time = 2000
+format = '[](fg:color_yellow)[ 󱎫 $duration ](bg:color_yellow fg:color_fg0)[](fg:color_yellow) '
+
+[jobs]
+symbol = " "
+format = '[](fg:color_purple)[ $symbol$number ](bg:color_purple fg:color_fg0)[](fg:color_purple) '
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+style = "bg:color_bg1"
+format = '[](fg:color_bg1)[[  $time ](fg:color_fg0 bg:color_bg1)]($style)[](fg:color_bg1)'
+
+[character]
+success_symbol = '[](bold fg:color_green)'
+error_symbol = '[](bold fg:color_red)'
+
+# IPs (LAN da rota padrão + Tailscale), exportados pelo prompt.bash
+[env_var.LVL9_IP_LAN]
+format = '[](fg:color_green)[ 󰩟 $env_value ](bg:color_green fg:color_fg0)[](fg:color_green) '
+
+[env_var.LVL9_IP_TS]
+format = '[](fg:#83a598)[ 󰖂 $env_value ](bg:#83a598 fg:color_fg0)[](fg:#83a598) '

@@ -1,0 +1,52 @@
+# Toda segunda às 06:00 (Brasília): busca as últimas versões, confere os sha256 e,
+# se algo mudou, abre um PR atualizando o versions.lock e dispara os testes nele.
+name: Atualizar versões
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Busca as últimas versões e confere os sha256
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp versions.lock /tmp/versions.lock.antes
+          tools/bump-versions.sh
+
+      - name: Abre ou atualiza o PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet versions.lock; then echo "nenhuma versão nova"; exit 0; fi
+          mudancas=$(diff <(awk '!/^#/ && $2 != "arm64" {print $1, $3}' /tmp/versions.lock.antes) \
+                          <(awk '!/^#/ && $2 != "arm64" {print $1, $3}' versions.lock) \
+                     | awk '/^</ {a[$2]=$3} /^>/ {b[$2]=$3} END {for (k in b) printf "| %s | %s | **%s** |\n", k, (k in a ? a[k] : "—"), b[k]}' | sort)
+          corpo=$(printf '%s\n\n| ferramenta | antes | agora |\n|---|---|---|\n%s\n\n%s' \
+            "Versões novas encontradas pelo \`tools/bump-versions.sh\`. Os sha256 foram calculados e, quando o projeto publica checksums, conferidos contra eles." \
+            "$mudancas" \
+            "Os testes de instalação (Debian 12/13, Ubuntu 24.04/26.04) rodam neste PR antes do merge.")
+          branch=versoes/atualizacao
+          git config user.name "lvl9-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -qam "versions.lock: atualiza versões ($(date +%Y-%m-%d))"
+          git push -qf origin "$branch"
+          if gh pr view "$branch" --json state -q .state 2>/dev/null | grep -q OPEN; then
+            gh pr edit "$branch" --body "$corpo"
+          else
+            gh pr create --base main --head "$branch" --title "Atualiza versões das ferramentas" --body "$corpo"
+          fi
+          # PRs abertos com o GITHUB_TOKEN não disparam outros workflows sozinhos
+          gh workflow run test.yml --ref "$branch"

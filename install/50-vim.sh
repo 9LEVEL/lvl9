@@ -19,6 +19,7 @@ executa() {
     copia "$tmp/halcyon/colors/halcyon.vim" "$h/.vim/colors/halcyon.vim"
     copia "$tmp/plug.vim" "$h/.vim/autoload/plug.vim"
     copia config/vim/lvl9-fzf.vim "$h/.vim/plugin/lvl9-fzf.vim"
+    copia config/vim/lvl9-node.vim "$h/.vim/plugin/lvl9-node.vim"
     como_alvo "$alvo" rm -f "$h/.vim/plugin/fzf-debian.vim"   # versão anterior ao lvl9
     como_alvo "$alvo" vim -E -s -u "$h/.vimrc" -i NONE -c 'PlugInstall --sync' -c 'qa!' </dev/null \
       || aviso "$alvo: PlugInstall terminou com aviso (rode :PlugInstall no vim se faltar algo)"

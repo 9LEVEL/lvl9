@@ -43,6 +43,7 @@ confere "node LTS via mise (usuário)" mise exec -- node --version
 confere "node LTS via mise (root)" sudo -H /usr/local/bin/mise exec -- node --version
 confere "vim: halcyon + :FZF + 10 plugins" bash -c 'vim -E -s -u ~/.vimrc -c "if !exists(\":FZF\") | cquit | endif" -c "if g:colors_name !=# \"halcyon\" | cquit | endif" -c "qa!" </dev/null && [[ $(ls ~/.vim/plugged | wc -l) -ge 10 ]]'
 confere "vim do root: plugins" sudo bash -c '[[ $(ls /root/.vim/plugged | wc -l) -ge 10 ]]'
+confere "sudo vim: coc.nvim acha o node" sudo vim -E -s -u /root/.vimrc -c 'if !executable(get(g:, "coc_node_path", "node")) | cquit | endif' -c 'qa!' </dev/null
 confere "tmux.conf válido" tmux -f ~/.tmux.conf start-server \; kill-server
 
 echo "== desktop e serviços =="

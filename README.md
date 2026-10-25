@@ -59,9 +59,11 @@ quando quiser: cada passo só mexe no que mudou e guarda backup do que substitui
 Duas linhas: à esquerda o que você está fazendo, à direita onde e quando.
 
 <p align="center">
-  <img src="docs/img/prompt.png" alt="O prompt com git, erro do último comando, duração, IPs e relógio" width="100%">
+  <img src="docs/img/prompt.png" alt="O prompt com usuário@host, git, erro do último comando, duração, IPs e relógio" width="100%">
 </p>
 
+- **Máquina**: `usuário@host` no começo da linha, sempre (não só via SSH), para você nunca rodar um
+  comando no servidor errado.
 - **Git**: branch e estado (`!` modificado, `?` novo).
 - **Erro e duração**: o código de saída aparece só quando o comando falha, e o tempo só quando passa de 2s.
 - **IP da LAN e do Tailscale**: o da LAN vem da interface da rota padrão (nunca do `docker0`), e o do

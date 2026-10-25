@@ -32,7 +32,7 @@ style_root = "bold red"
 format = "[$user]($style)"
 
 [hostname]
-ssh_only = true
+ssh_only = false   # sempre: saber em que máquina você está
 ssh_symbol = " "
 style = "bold bright-cyan"
 format = "[$hostname$ssh_symbol]($style)"

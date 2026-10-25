@@ -64,9 +64,8 @@ alias atualiza-ip='refresh-ip'
 
 __lvl9_precmd() { __lvl9_ips; __titulo_janela; }
 
-# Estilo ParrotOS em bash puro, com relógio à direita na 1ª linha
-# (o @host só aparece via SSH):
-#   ┌─[✘ 1]─[user]─[~/pasta]─[ main]──────────────[ 10:12:03]
+# Estilo ParrotOS em bash puro, com relógio à direita na 1ª linha:
+#   ┌─[✘ 1]─[user@host]─[~/pasta]─[ main]──────────────[ 10:12:03]
 #   └──╼ $
 __prompt_parrot() {
   local s=$? r='\[\e[0;31m\]' y='\[\e[1;33m\]' c='\[\e[1;96m\]' g='\[\e[0;32m\]'
@@ -86,7 +85,7 @@ __prompt_parrot() {
   local esq="${r}┌─" vis="┌─"
   (( s )) && { esq+="[\[\e[1;91m\]✘ $s${r}]─"; vis+="[✘ $s]─"; }
   esq+="[${u}"; vis+="[$__lvl9_usuario"
-  [[ -n $SSH_CONNECTION ]] && { esq+="${y}@${c}\h"; vis+="@${HOSTNAME%%.*}"; }
+  esq+="${y}@${c}\h"; vis+="@${HOSTNAME%%.*}"
   esq+="${r}]─[${g}\w${r}]"; vis+="]─[${PWD/#$HOME/\~}]"
   b=$(git branch --show-current 2>/dev/null)
   if [[ -n $b ]]; then

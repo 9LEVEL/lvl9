@@ -55,10 +55,10 @@ style_root = "bg:#a3aed2 fg:#c53b53 bold"
 format = "[$user]($style)"
 
 [hostname]
-ssh_only = true
+ssh_only = false   # sempre: saber em que máquina você está
 ssh_symbol = ""
 style = "bg:#a3aed2 fg:#090c0c"
-format = "[@$hostname $ssh_symbol]($style)"
+format = "[@$hostname( $ssh_symbol)]($style)"
 
 [directory]
 style = "fg:#e3e5e5 bg:#769ff0"

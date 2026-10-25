@@ -1,5 +1,6 @@
 # Minimalista do Omarchy (akitaonrails/omarchy, config/starship.toml), 1 linha.
-# Acréscimo: mostra o usuário quando é root ou via SSH (padrão do módulo username).
+# Acréscimos: o host sempre e o usuário quando é root ou via SSH (padrão do módulo
+# username), como "host ~/pasta ❯" ou "root@host ~/pasta ❯".
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
 command_timeout = 200
@@ -8,10 +9,11 @@ format = "[$username$hostname$directory$git_branch$git_status]($style)$character
 
 [username]
 style_root = "bold red"
-format = "[$user]($style) "
+format = "[$user@]($style)"
 
 [hostname]
-format = "[@$hostname]($style) "
+ssh_only = false
+format = "[$hostname]($style) "
 
 [character]
 error_symbol = "[✗](bold cyan)"
